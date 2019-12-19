@@ -1,0 +1,1 @@
+document.body.innerHTML = 'Hallo Welt'
