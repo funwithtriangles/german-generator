@@ -1,4 +1,4 @@
-import { Noun, Gender, PersonalPronoun, Case } from './types'
+import { Noun, Gender, PersonalPronoun, Case, Person } from './types'
 import { nounList, verbList } from './parseData'
 import { randFromArray } from './utils'
 import { getArticle } from './articles'
@@ -19,8 +19,8 @@ const personalPronouns: PersonalPronoun[] = [
   ['sie', 's3'],
   ['es', 's3'],
   ['wir', 'p1'],
-  ['ihr', 's2'],
-  ['sie', 's3'],
+  ['ihr', 'p2'],
+  ['sie', 'p3'],
 ]
 
 const buildNounWithArticle = (n: Noun, isPlural: boolean, germanCase: Case = 'nominative'): string => {
@@ -37,13 +37,28 @@ const buildNounWithArticle = (n: Noun, isPlural: boolean, germanCase: Case = 'no
 
 const getRandIsPlural = () => Math.random() > 0.5
 
-const articleNoun = buildNounWithArticle(randFromArray(nounList), getRandIsPlural(), 'accusative')
+const randNounWithArticle = (germanCase: Case) => buildNounWithArticle(randFromArray(nounList), getRandIsPlural(), germanCase)
+const randVerb = (person: Person) => randFromArray(verbList)[person]
 
-const personalPronoun = randFromArray(personalPronouns)
+let sentence
 
-// Conjugate the verb based on the personal pronoun
-const verb = randFromArray(verbList)[personalPronoun[1]]
+const sentenceNum = Math.floor(Math.random() * 2)
 
-const sentence = `${personalPronoun[0]} ${verb} ${articleNoun}`
+// Randomize between different sentence structures
+switch (sentenceNum) {
+  case 0: {
+    // Pronoun - verb - noun (e.g. "Ich esse die wurst")
+    const pPronoun = randFromArray(personalPronouns)
+    const person = pPronoun[1]
+    sentence = `${pPronoun[0]} ${randVerb(person)} ${randNounWithArticle('accusative')}`
+  } break
+  case 1: {
+    // Noun - verb - noun (e.g. "Die katze isst die wurst")
+    const isPlural = getRandIsPlural()
+    const noun0 = buildNounWithArticle(randFromArray(nounList), isPlural)
+    const person = isPlural ? 'p3' : 's3'
+    sentence = `${noun0} ${randVerb(person)} ${randNounWithArticle('accusative')}`
+  } break
+}
 
 document.body.innerHTML = sentence
