@@ -2,6 +2,10 @@ export type Person = 's1' | 's2' | 's3' | 'p1' | 'p2' | 'p3'
 
 export type Gender = 'm' | 'f' | 'n'
 
+export type Case = 'nominative' | 'accusative' | 'dative'
+
+export type ArticleType = 'definite' | 'indefinite'
+
 // Nouns have a gender. The plural form is also stored because there is no
 // fixed rule. It is sometimes exactly the same as the singular
 // (so we have it as an optional property here)

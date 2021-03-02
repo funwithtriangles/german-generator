@@ -1,6 +1,7 @@
-import { Noun, Gender, PersonalPronoun } from './types'
+import { Noun, Gender, PersonalPronoun, Case } from './types'
 import { nounList, verbList } from './parseData'
 import { randFromArray } from './utils'
+import { getArticle } from './articles'
 
 // Definitive articles (e.g. "the", instead of "an") change
 // depending on the gender of the noun
@@ -22,9 +23,13 @@ const personalPronouns: PersonalPronoun[] = [
   ['sie', 's3'],
 ]
 
-const buildNoun = (n: Noun, isPlural: boolean): string => {
-  // If plural, use "die"
-  const art = isPlural ? definitiveArticles.f : definitiveArticles[n.gender]
+const buildNounWithArticle = (n: Noun, isPlural: boolean, germanCase: Case = 'nominative'): string => {
+  const art = getArticle({
+    type: 'definite',
+    gender: n.gender,
+    germanCase,
+    isPlural,
+  })
   // If plural, use plural form. If no plural form, use singular form
   const word = isPlural ? (n.plural || n.singular) : n.singular
   return `${art} ${word}`
@@ -32,7 +37,7 @@ const buildNoun = (n: Noun, isPlural: boolean): string => {
 
 const getRandIsPlural = () => Math.random() > 0.5
 
-const articleNoun = buildNoun(randFromArray(nounList), getRandIsPlural())
+const articleNoun = buildNounWithArticle(randFromArray(nounList), getRandIsPlural(), 'accusative')
 
 const personalPronoun = randFromArray(personalPronouns)
 
