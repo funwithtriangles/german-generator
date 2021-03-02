@@ -31,14 +31,20 @@ const buildNounWithArticle = (n: Noun, isPlural: boolean, germanCase: Case = 'no
     isPlural,
   })
   // If plural, use plural form. If no plural form, use singular form
-  const word = isPlural ? (n.plural || n.singular) : n.singular
+  let word
+
+  if (isPlural) {
+    word = germanCase === 'dative' ? n.pluralDative : n.plural
+  } else {
+    word = n.singular
+  }
+
   return `${art} ${word}`
 }
 
 const getRandIsPlural = () => Math.random() > 0.5
 
 const randNounWithArticle = (germanCase: Case) => buildNounWithArticle(randFromArray(nounList), getRandIsPlural(), germanCase)
-const randVerb = (person: Person) => randFromArray(verbList)[person]
 
 let sentence
 
@@ -50,14 +56,16 @@ switch (sentenceNum) {
     // Pronoun - verb - noun (e.g. "Ich esse die wurst")
     const pPronoun = randFromArray(personalPronouns)
     const person = pPronoun[1]
-    sentence = `${pPronoun[0]} ${randVerb(person)} ${randNounWithArticle('accusative')}`
+    const verb = randFromArray(verbList)
+    sentence = `${pPronoun[0]} ${verb[person]} ${randNounWithArticle(verb.germanCase)}`
   } break
   case 1: {
     // Noun - verb - noun (e.g. "Die katze isst die wurst")
     const isPlural = getRandIsPlural()
     const noun0 = buildNounWithArticle(randFromArray(nounList), isPlural)
     const person = isPlural ? 'p3' : 's3'
-    sentence = `${noun0} ${randVerb(person)} ${randNounWithArticle('accusative')}`
+    const verb = randFromArray(verbList)
+    sentence = `${noun0} ${verb[person]} ${randNounWithArticle(verb.germanCase)}`
   } break
 }
 

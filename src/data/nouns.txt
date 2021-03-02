@@ -1,3 +1,3 @@
-m Käfer
-f Ameise Ameisen
-f Katze Katzen
+m Käfer Käfer Käfern
+f Ameise Ameisen Ameisen
+f Katze Katzen Katzen

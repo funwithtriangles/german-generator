@@ -7,16 +7,18 @@ export type Case = 'nominative' | 'accusative' | 'dative'
 export type ArticleType = 'definite' | 'indefinite'
 
 // Nouns have a gender. The plural form is also stored because there is no
-// fixed rule. It is sometimes exactly the same as the singular
-// (so we have it as an optional property here)
+// fixed rule. Dative plural always has an "n" on the end, if one isn't already there.
+// Could probably generate this instead of storing in the data
 export type Noun = {
   gender: Gender,
   singular: string,
-  plural?: string,
+  plural: string,
+  pluralDative: string,
 }
 
 // Verbs have many forms. They are "conjugated" depending on the personal pronoun
 export type Verb = {
+  germanCase: Case,
   // Singular (1st person, 2nd person, 3rd person)
   s1: string,  // Ich - I
   s2: string,  // du - you

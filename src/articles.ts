@@ -24,15 +24,15 @@ const articles = {
   indefinite: {
     nominative: {
       m: 'ein',
-      f: 'einen',
+      f: 'eine',
       n: 'ein',
       p: '---',
     },
     // TODO
     accusative: {
-      m: 'xxx',
-      f: 'xxx',
-      n: 'xxx',
+      m: 'einem',
+      f: 'eine',
+      n: 'ein',
       p: '---',
     },
     dative: {
