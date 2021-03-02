@@ -1,21 +1,44 @@
-import { Noun, Gender } from './types'
-import { nounList } from './parseData'
+import { Noun, Gender, PersonalPronoun } from './types'
+import { nounList, verbList } from './parseData'
+import { randFromArray } from './utils'
 
-export const articles: Record<Gender, string> = {
+// Definitive articles (e.g. "the", instead of "an") change
+// depending on the gender of the noun
+const definitiveArticles: Record<Gender, string> = {
   m: 'der',
   f: 'die',
   n: 'das',
 }
 
-export const buildNoun = (n: Noun, isPlural: boolean): string => {
+// Personal pronouns defined with their person (e.g. 1st Person singular)
+const personalPronouns: PersonalPronoun[] = [
+  ['Ich', 's1'],
+  ['du', 's2'],
+  ['er', 's3'],
+  ['sie', 's3'],
+  ['es', 's3'],
+  ['wir', 'p1'],
+  ['ihr', 's2'],
+  ['sie', 's3'],
+]
+
+const buildNoun = (n: Noun, isPlural: boolean): string => {
   // If plural, use "die"
-  const art = isPlural ? articles.f : articles[n.gender]
+  const art = isPlural ? definitiveArticles.f : definitiveArticles[n.gender]
   // If plural, use plural form. If no plural form, use singular form
   const word = isPlural ? (n.plural || n.singular) : n.singular
   return `${art} ${word}`
 }
 
-export const getRandNoun = () => nounList[Math.floor(Math.random() * nounList.length)]
-export const getRandIsPlural = () => Math.random() > 0.5
+const getRandIsPlural = () => Math.random() > 0.5
 
-document.body.innerHTML = buildNoun(getRandNoun(), getRandIsPlural())
+const articleNoun = buildNoun(randFromArray(nounList), getRandIsPlural())
+
+const personalPronoun = randFromArray(personalPronouns)
+
+// Conjugate the verb based on the personal pronoun
+const verb = randFromArray(verbList)[personalPronoun[1]]
+
+const sentence = `${personalPronoun[0]} ${verb} ${articleNoun}`
+
+document.body.innerHTML = sentence

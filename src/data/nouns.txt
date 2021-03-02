@@ -1,4 +1,3 @@
 m Käfer
 f Ameise Ameisen
-f Katse Katsen
-m Hund Hunde
+f Katze Katzen
